@@ -38,25 +38,34 @@ jobs:
           name: isvalid-api-jar
           path: target/*.jar
 
-#  build-and-push-docker:
-#    name: Build & Push Docker Image
-#    runs-on: ubuntu-latest
-#    needs: build-and-test
-#    steps:
-#      - name: 📥 Checkout código
-#        uses: actions/checkout@v4
-#
-#      - name: 🔑 Login no GitLab Container Registry
-#        run: echo "${{ secrets.GITLAB_REGISTRY_PASSWORD }}" | docker login registry.gitlab.com -u "${{ secrets.GITLAB_REGISTRY_USER }}" --password-stdin
-#
-#      - name: 🏗️ Construir imagem Docker
-#        run: |
-#          docker build -t registry.gitlab.com/${{ secrets.GITLAB_PROJECT }}/isvalid-api:latest .
-#
-#      - name: 📤 Publicar imagem no GitLab Container Registry
-#        run: |
-#          docker push registry.gitlab.com/${{ secrets.GITLAB_PROJECT }}/isvalid-api:latest
-#
+  build-and-push-docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 📦 Baixar artefato do JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: isvalid-api-jar
+          path: target
+
+      - name: 🔑 Login no GitHub Container Registry (GHCR)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: 🏗️ Construir imagem Docker
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/isvalid-api:latest .
+
+      - name: 📤 Publicar imagem no GitHub Container Registry (GHCR)
+        run: |
+          docker push ghcr.io/${{ github.repository }}/isvalid-api:latest
+
 #  deploy:
 #    name: Deploy to Server (Optional)
 #    runs-on: ubuntu-latest
