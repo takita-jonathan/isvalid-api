@@ -70,7 +70,6 @@ jobs:
   verify-terraform:
     name: Terraform Workflow
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, '.infra') || contains(github.event.head_commit.added, '.infra') || contains(github.event.head_commit.removed, '.infra')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -114,10 +113,9 @@ jobs:
           path: ./infra/terraform-output.json
 
   deploy:
-    name: Deploy to Server (Optional)
+    name: Deploy to Server
     runs-on: ubuntu-latest
     needs: [verify-terraform, push-docker]
-    if: always() && (needs.push-docker.result == 'success' && (needs.verify-terraform.result == 'success' || needs.verify-terraform.result == 'skipped'))
     permissions:
       packages: read
     steps:
