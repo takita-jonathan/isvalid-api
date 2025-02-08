@@ -39,8 +39,8 @@ jobs:
           name: isvalid-api-jar
           path: target/*.jar
 
-  push-docker:
-    name: Push Docker Image
+  publish-docker:
+    name: Publish Docker Image
     runs-on: ubuntu-latest
     needs: build-and-test
     permissions:
@@ -115,7 +115,7 @@ jobs:
   deploy:
     name: Deploy to Server
     runs-on: ubuntu-latest
-    needs: [verify-terraform, push-docker]
+    needs: [publish-docker, verify-terraform ]
     permissions:
       packages: read
     steps:
