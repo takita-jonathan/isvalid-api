@@ -1,7 +1,7 @@
 resource "aws_instance" "app" {
   ami           = "ami-0c820c196a818d66a"
   instance_type = "t2.micro"
-  key_name      = "my-ec2-key"
+  key_name      = "isvalid-api"
   security_groups = [aws_security_group.is-valid-sg.name]
 
   lifecycle {
