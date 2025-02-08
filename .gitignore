@@ -33,3 +33,5 @@ build/
 .vscode/
 
 isvalid-api.pem
+
+infra/.terraform/
