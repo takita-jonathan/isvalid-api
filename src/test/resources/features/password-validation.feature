@@ -1,4 +1,4 @@
-@all @password
+@all @password @service
 Feature: Password Validation
   As a user
   I want to validate my password
