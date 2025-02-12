@@ -172,3 +172,13 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}/isvalid-api:latest
             docker run -d -p 8080:8080 --restart always --name myapp ghcr.io/${{ github.repository }}/isvalid-api:latest
           EOF
+
+      - name: Show Public URL
+        run: echo "::notice title=Service URL::http://${{ env.PUBLIC_IP }}:8080/swagger-ui.html"
+
+      - name: Show Public URL in Job Summary
+        run: |
+          echo "## ✅ Application Deployed Successfully 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**🔗 Service URL:** [Swagger Link](http://${{ env.PUBLIC_IP }}:8080/swagger-ui.html)" >> $GITHUB_STEP_SUMMARY
+
